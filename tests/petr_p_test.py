@@ -6,7 +6,6 @@ from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 
 
-
 def test_docker():
     driver = webdriver.Chrome()
 
@@ -33,7 +32,8 @@ def test_docker():
         count = 0
         while count <= 5:
             try:
-                search_text = driver.find_element(by=By.XPATH, value="//p[contains(text(), 'Jenkins is an open-source automation server that enables developers to build')]")
+                search_text = driver.find_element(by=By.XPATH,
+                                                  value="//p[contains(text(), 'Jenkins is an open-source automation server that enables developers to build')]")
                 break
             except Exception:
                 count += 1
@@ -46,8 +46,37 @@ def test_docker():
         print("Закрытие браузера...")
         driver.quit()
 
-        assert target_text in out_text
+        assert target_text == out_text
+
+
+def test_github():
+
+    find = False
+    driver = webdriver.Chrome()
+
+    try:
+        driver.get("https://github.com/")
+        driver.implicitly_wait(2)
+
+        driver.find_element(By.XPATH, value="//button[@placeholder='Search or jump to...']").click()
+        driver.find_element(By.ID, value="query-builder-test").send_keys("redrover")
+        driver.find_element(By.XPATH, value="//span[text()='Search all of GitHub']").click()
+        elements = driver.find_elements(By.XPATH, value="//a[@href='/RedRoverSchool/RedRover.school']")
+
+        for i in elements:
+            if i.text == "RedRoverSchool/RedRover.school":
+                find = True
+                break
+
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
+    finally:
+        driver.quit()
+        print("Закрытие браузера...")
+
+        assert find, "RedRoverSchool/RedRover.school не найден в результате поиска"
 
 
 if __name__ == "__main__":
     test_docker()
+    test_github()
