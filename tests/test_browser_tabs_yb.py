@@ -16,4 +16,5 @@ def test_browser_tabs_yb(browser):
 
     wait.until(EC.url_contains("google"))
     browser.switch_to.window(window1)
+    
     assert browser.current_window_handle == window1
