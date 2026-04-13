@@ -47,8 +47,8 @@ def demo():
         driver.find_element(*button_terms_locator).click()
         driver.find_element(*button_submit_locator).click()
 
-        assert button_fill_again_locator
-        print("✅ Тест пройден успешно!")
+        assert driver.find_element(*button_fill_again_locator).is_displayed()
+        print("Тест пройден успешно!")
 
     except Exception as e:
         print(f"Произошла ошибка: {e}")
