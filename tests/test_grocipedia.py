@@ -11,7 +11,7 @@ def test_find_element():
 
     search_button = driver.find_element(By.XPATH, '//*[@id="search-submit"]')
     search_button.click()
-    time.sleep(2)
+    # time.sleep(2)
 
     submit_button = driver.find_element(By.XPATH, '/html/body/main/div[3]/a[1]/div/div[2]/div/span')
     submit_button.click()
@@ -19,7 +19,4 @@ def test_find_element():
 
     page_header = driver.find_element(By.XPATH, '//*[@id="python_efteling"]')
 
-    time.sleep(2)
-
     assert page_header.text ==  'Python (Efteling)'
-    driver.quit()
