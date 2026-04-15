@@ -4,4 +4,4 @@ def test_start_page(browser):
     browser.get("https://scratch.mit.edu/")
     element = browser.find_element(By.ID, "navigation")
 
-    assert "Создавай" in element.text
+    assert "Create" in element.text
