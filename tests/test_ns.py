@@ -11,7 +11,8 @@ def test_python_org_search_input(browser):
     search_box.clear()
     search_box.send_keys("Job - Python Developer")
 
-    search_box.send_keys(Keys.ENTER)
+    search_button = browser.find_element(By.ID, "submit")
+    search_button.click()
 
 
     time.sleep(1)  # Пауза для наглядности
