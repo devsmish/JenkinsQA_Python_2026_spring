@@ -13,7 +13,7 @@ from selenium.webdriver.support.ui import Select
 #
 # text_box = driver.find_element(by=By.NAME, value="my-textarea")
 # text_box.send_keys("My city")
-# time.sleep(1)
+# time.sleep(2)
 #
 #
 # #         Dropdowns
