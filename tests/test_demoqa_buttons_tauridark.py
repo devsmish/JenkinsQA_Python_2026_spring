@@ -1,4 +1,6 @@
-import time
+from selenium.common import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
@@ -10,17 +12,19 @@ def test_button_double_click(browser):
     """
 
     browser.get(button_url)
-    button_double_click = browser.find_element(
-        By.XPATH, "//button[@id='doubleClickBtn']"
-    )
 
-    time.sleep(1)
-    ActionChains(browser).double_click(button_double_click).perform()
+    try:
+        wait = WebDriverWait(browser, 10)
+        button_double_click = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Double Click Me']")))
 
-    appeared_element = browser.find_element(By.XPATH, "//p[@id='doubleClickMessage']")
+        ActionChains(browser).move_to_element(button_double_click).double_click(button_double_click).perform()
 
-    assert appeared_element.text == "You have done a double click"
+        success_message = wait.until(EC.presence_of_element_located((By.XPATH, "//p[@id='doubleClickMessage']")))
+        assert success_message.text == "You have done a double click"
 
+    except TimeoutException:
+        print("Кнопка не стала кликабельной за 10 секунд")
+        raise
 
 def test_button_right_click(browser):
     """
@@ -28,16 +32,19 @@ def test_button_right_click(browser):
     """
 
     browser.get(button_url)
-    button_right_click = browser.find_element(
-        By.XPATH, "//button[@id='rightClickBtn']"
-    )
 
-    time.sleep(1)
-    ActionChains(browser).context_click(button_right_click).perform()
+    try:
+        wait = WebDriverWait(browser, 10)
+        button_right_click = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Right Click Me']")))
+        ActionChains(browser).move_to_element(button_right_click).context_click(button_right_click).perform()
 
-    appeared_element = browser.find_element(By.XPATH, "//p[@id='rightClickMessage']")
+        success_message = wait.until(EC.presence_of_element_located((By.XPATH, "//p[@id='rightClickMessage']")))
 
-    assert appeared_element.text == "You have done a right click"
+        assert success_message.text == "You have done a right click"
+
+    except TimeoutException:
+        print("Кнопка не стала кликабельной за 10 секунд")
+        raise
 
 def test_button_click(browser):
     """
@@ -45,12 +52,16 @@ def test_button_click(browser):
     """
 
     browser.get(button_url)
-    button_click = browser.find_element(
-        By.XPATH, "//button[text()='Click Me']"
-    )
-    time.sleep(1)
-    button_click.click()
 
-    appeared_element = browser.find_element(By.XPATH, "//p[@id='dynamicClickMessage']")
+    try:
+        wait = WebDriverWait(browser, 10)
+        button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click Me']")))
+        ActionChains(browser).move_to_element(button).click(button).perform()
 
-    assert appeared_element.text == "You have done a dynamic click"
+        success_message = wait.until(EC.presence_of_element_located((By.XPATH, "//p[@id='dynamicClickMessage']")))
+
+        assert success_message.text == "You have done a dynamic click"
+
+    except TimeoutException:
+        print("Кнопка не стала кликабельной за 10 секунд")
+        raise
