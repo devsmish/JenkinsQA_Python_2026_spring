@@ -33,3 +33,7 @@ def test_navigation():
     assert driver.current_url != old_url
 
     driver.quit()
+
+def test_in_browser(browser):
+    browser.get("https://python.org")
+    assert "Python" in browser.title and "python.org" in browser.current_url
