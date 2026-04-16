@@ -9,3 +9,27 @@ def test_open_site():
 
 
     driver.quit()
+
+
+def test_navigation():
+    driver = webdriver.Chrome()
+
+    driver.get("https://vk.com")
+    print(driver.title)
+
+    driver.get("https://ya.ru")
+    print(driver.title)
+
+    driver.back()
+    assert "vk" in driver.current_url
+
+    driver.refresh()
+
+    print(driver.current_url)
+
+    old_url = driver.current_url
+
+    driver.forward()
+    assert driver.current_url != old_url
+
+    driver.quit()
