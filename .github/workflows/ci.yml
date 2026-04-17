@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-test:
+    name: 'Run tests'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: 'recursive'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Prepare Jenkins data
+        run: |
+          cat ${{ github.workspace }}/_jenkins_data/jenkins_backup* > ${{ github.workspace }}/jenkins_backup.tar
+          md5sum ${{ github.workspace }}/jenkins_backup.tar
+
+      - name: Extract Jenkins data and set permission
+        run: |
+          tar -xvf ./jenkins_backup.tar
+          chmod -R 777 ./jenkins_backup/var/jenkins_home
+
+      - name: Docker login
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Docker start
+        run: docker run --rm --detach -p 8080:8080 -v ${{ github.workspace }}/jenkins_backup/var/jenkins_home:/var/jenkins_home jenkins/jenkins:2.541.3-lts-jdk25
+
+      - name: Wait for the Jenkins
+        run: ./.github/wait-for-jenkins.sh
+
+#      - name: Pytest
+#        run: pytest -v -s --ignore=tests/old/
+#        env:
+#          JENKINS_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+#          JENKINS_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+#          JENKINS_API_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+#          JENKINS_HOST: localhost
+#          JENKINS_PORT: 8080
+#          BROWSER_NAME: chrome
+#          BROWSER_OPTIONS_CHROME: --remote-allow-origins=*;--disable-gpu;--no-sandbox;--disable-dev-shm-usage;--headless=new;--window-size=1920,1080
+#          RUN_CI: true
