@@ -3,8 +3,6 @@ from time import sleep, time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-from tests.simple_example import message
-
 driver = webdriver.Chrome()
 
 driver.get("https://www.selenium.dev/")
