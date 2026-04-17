@@ -1,5 +1,8 @@
 import time
+from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def test_treugolnik(browser):
@@ -14,7 +17,11 @@ def test_treugolnik(browser):
     side_c = browser.find_element(By.CLASS_NAME,'js_c')
     side_c.clear()
     side_c.send_keys('4')
-    button = browser.find_element(By.XPATH,'//*[@id="puzzle"]/div[2]/div[2]/div[6]/button[1]')
-    button.click()
-    # assert 'Это прямоугольный треугольник.' in browser.find_element(By.XPATH,'//*[@id="puzzle"]/div[2]/div[2]/div[2]/text()[1])')
+    time.sleep(10)
+    browser.find_element(By.XPATH,'//*[@id="puzzle"]/div[2]/div[2]/div[6]/button[1]').click()
+    wait = WebDriverWait(browser, 10)
+    result_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".info")))
+    print(result_element.text)
+    assert 'Это прямоугольный треугольник.' in result_element.text
+
 
