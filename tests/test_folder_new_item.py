@@ -12,4 +12,4 @@ def test_folder_new_item(browser):
 
     buttom = browser.find_element(By.ID, "ok-button")
 
-    assert buttom.is_displayed()
+    assert buttom.is_enabled()
