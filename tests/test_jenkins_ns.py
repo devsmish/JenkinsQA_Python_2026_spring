@@ -8,7 +8,7 @@ def test_jenkins_ns(browser):
     browser.find_element(By.XPATH,"//*[@id='j-add-item-type-standalone-projects']/ul/li[1]").click()
     browser.find_element(By.ID, "ok-button").click()
 
-    browser.find_element(By.ID, "name='Submit").click()
+    browser.find_element(By.XPATH, "//*[@id='bottom-sticker']/div").click()
     label=browser.find_element(By.ID,"job-index-headline page-headline")
 
     assert label.text == "test_1"
