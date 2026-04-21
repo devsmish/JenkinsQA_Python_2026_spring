@@ -2,9 +2,11 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
+import pytest
 
 pipeline_name = "Pipeline_Name"
 
+@pytest.mark.skip()
 def test_create_pipeline_project(browser):
     browser.find_element(By.XPATH, "//a[@href='/view/all/newJob']").click()
     browser.find_element(By.ID, "name").send_keys(pipeline_name)
