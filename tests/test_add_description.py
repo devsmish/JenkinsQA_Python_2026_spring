@@ -5,7 +5,6 @@ def test_add_description(browser):
     add_button = browser.find_element(By.CSS_SELECTOR, '#description-link.jenkins-button')
     add_button.click()
     input_description = browser.find_element(By.NAME, 'description')
-    # description_value = input()
     input_description.send_keys('My First Jenkins Test')
     sleep(1)
     save_button = browser.find_element(By.NAME, 'Submit')
