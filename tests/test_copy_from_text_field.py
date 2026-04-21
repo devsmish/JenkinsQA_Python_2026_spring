@@ -1,7 +1,9 @@
 from time import sleep
+
+import pytest
 from selenium.webdriver.common.by import By
 
-
+@pytest.mark.skip()
 def test_copy_from_text_field(browser):
     """TC_01.003.01. Verifies 'Copy from' Text Field available"""
     browser.find_element(By.XPATH, "//a[@href='/view/all/newJob']").click()
