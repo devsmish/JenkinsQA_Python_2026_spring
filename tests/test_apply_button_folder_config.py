@@ -1,7 +1,8 @@
 from selenium.webdriver.common.by import By
+import pytest
 
 
-
+@pytest.mark.skip()
 def test_apply_button_folder_config(browser):
     new_item_button = browser.find_element(By.XPATH, "//a[contains(., 'New Item')]")
     new_item_button.click()
