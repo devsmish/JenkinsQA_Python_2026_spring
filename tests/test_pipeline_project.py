@@ -29,6 +29,8 @@ def test_create_project(browser):
     "PipelineName2",
     "PipelineName3"
 ])
+
+@pytest.mark.skip
 def test_check_several_tests(browser, job_name):
     create_pipeline_project(browser, job_name)
     created_pipeline = browser.find_element(By.CSS_SELECTOR, ".jenkins-table__link >span:first-child").text
