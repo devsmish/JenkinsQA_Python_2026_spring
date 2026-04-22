@@ -33,6 +33,7 @@ def test_copy_from_text_field(browser):
     assert text_field_name.text == "Copy from"
 
     text_field = browser.find_element(By.XPATH, "(//input[@id='from'])[1]")
+    browser.execute_script("arguments[0].scrollIntoView(true);", text_field)
     wait.until(ec.element_to_be_clickable((By.XPATH, "(//input[@id='from'])[1]"))).click()
     wait.until(ec.element_to_be_clickable((By.XPATH, "(//input[@id='from'])[1]"))).send_keys("my_first_pipeline")
 
