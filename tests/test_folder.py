@@ -93,3 +93,12 @@ def test_create_nested_folder(browser):
         crumb.text for crumb in browser.find_elements(By.CSS_SELECTOR, ".jenkins-breadcrumbs__list-item")
     ]
     assert breadcrumb_texts == [FOLDER_NAME, nested_folder]
+
+def test_create_folder_with_empty_name(browser):
+    browser.find_element(By.XPATH, "//a[@href='/view/all/newJob']").click()
+
+    browser.find_element(By.ID, "name").send_keys("")
+    browser.find_element(By.CLASS_NAME, "com_cloudbees_hudson_plugins_folder_Folder").click()
+
+    assert browser.find_element(By.ID, "itemname-required").text == "» This field cannot be empty, please enter a valid name"
+    assert not browser.find_element(By.ID, "ok-button").is_enabled()
