@@ -51,6 +51,7 @@ def test_create_folder_with_description(browser):
 
 def test_create_new_folder(browser):
     name = "new_folder"
+    
     wait = WebDriverWait(browser, 2)
     browser.find_element(By.XPATH, "//*[@id='tasks']/div[1]/span/a").click()
     wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@id='add-item-panel']/h1")))
@@ -59,4 +60,5 @@ def test_create_new_folder(browser):
     browser.find_element(By.XPATH, "//*[@id='ok-button']").click()
     wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@id='bottom-sticker']/div/button[1]")))
     browser.find_element(By.XPATH, "//*[@id='bottom-sticker']/div/button[1]").click()
+
     assert name == browser.find_element(By.XPATH, "//*[@id='main-panel']/div[1]/div/h1").text
