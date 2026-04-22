@@ -1,3 +1,4 @@
+import pytest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -94,7 +95,7 @@ def test_create_nested_folder(browser):
     ]
     assert breadcrumb_texts == [FOLDER_NAME, nested_folder]
 
-def test_create_folder_with_empty_name(browser):
+def test_create_folder_with_empty_name_negative(browser):
     browser.find_element(By.XPATH, "//a[@href='/view/all/newJob']").click()
 
     browser.find_element(By.ID, "name").send_keys("")
@@ -102,3 +103,25 @@ def test_create_folder_with_empty_name(browser):
 
     assert browser.find_element(By.ID, "itemname-required").text == "» This field cannot be empty, please enter a valid name"
     assert not browser.find_element(By.ID, "ok-button").is_enabled()
+
+@pytest.mark.parametrize("character", ["/", "\\", "|", "?", "*", ":", ">", "<"])
+def test_create_folder_with_invalid_characters_negative(browser, character):
+    browser.find_element(By.XPATH, "//a[@href='/view/all/newJob']").click()
+
+    browser.find_element(By.ID, "name").send_keys(f"{FOLDER_NAME}{character}")
+    browser.find_element(By.CLASS_NAME, "com_cloudbees_hudson_plugins_folder_Folder").click()
+
+    expected_error  = f"‘{character}’ is an unsafe character"
+    error_message = WebDriverWait(browser, 5).until(
+        EC.visibility_of_element_located((By.ID, "itemname-invalid"))
+    )
+    assert error_message.text == "» " + expected_error
+
+    # кнопка ниже по логике должна быть неактивна и тест бы закончился тут
+    browser.find_element(By.ID, "ok-button").click()
+
+    h1_text = WebDriverWait(browser, 5).until(
+        EC.visibility_of_element_located((By.TAG_NAME, "h1"))
+    ).text
+    assert h1_text == "Error"
+    assert browser.find_element(By.TAG_NAME, "p").text == expected_error
