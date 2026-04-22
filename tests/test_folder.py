@@ -51,7 +51,7 @@ def test_create_folder_with_description(browser):
 
 def test_create_new_folder(browser):
     name = "new_folder"
-    
+
     wait = WebDriverWait(browser, 2)
     browser.find_element(By.XPATH, "//*[@id='tasks']/div[1]/span/a").click()
     wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@id='add-item-panel']/h1")))
