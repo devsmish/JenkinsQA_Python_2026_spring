@@ -5,7 +5,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 FOLDER_NAME = "TestOrganizationFolder"
 
-
 def test_create_organization_folder(browser):
     browser.find_element(By.LINK_TEXT, "New Item").click()
     browser.find_element(By.ID, "name").send_keys(FOLDER_NAME)
