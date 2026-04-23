@@ -1,11 +1,11 @@
 import random
 import string
+import pytest
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from selenium.webdriver.support.ui import WebDriverWait
-
-import pytest
 from selenium.webdriver.common.by import By
+
 
 @pytest.mark.skip()
 def test_copy_from_text_field(browser):
@@ -29,10 +29,10 @@ def test_copy_from_text_field(browser):
 
     assert text_field.text == "Copy from"
 
+
 def test_copy_form(browser):
     FIRST_NAME = "first_folder"
     random_name = "folder_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
-
 
     wait = WebDriverWait(browser, 5)
 
@@ -40,7 +40,8 @@ def test_copy_form(browser):
 
     wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@id='add-item-panel']//h1")))
     wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@name='name']"))).send_keys(FIRST_NAME)
-    wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@id='j-add-item-type-nested-projects']//li[contains(@class, 'com_cloudbees_hudson_plugins_folder_Folder')]"))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH,
+                                           "//div[@id='j-add-item-type-nested-projects']//li[contains(@class, 'com_cloudbees_hudson_plugins_folder_Folder')]"))).click()
     wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@id='ok-button']"))).click()
     wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@name='Submit']"))).click()
 
@@ -48,12 +49,11 @@ def test_copy_form(browser):
 
     wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@id='tasks']//a[contains(@href, 'newJob')]"))).click()
     wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@name='name']"))).send_keys(random_name)
-    wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@id='j-add-item-type-nested-projects']//li[contains(@class, 'com_cloudbees_hudson_plugins_folder_Folder')]"))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH,
+                                           "//div[@id='j-add-item-type-nested-projects']//li[contains(@class, 'com_cloudbees_hudson_plugins_folder_Folder')]"))).click()
     wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@id='from']"))).send_keys(FIRST_NAME)
-
 
     wait.until(EC.element_to_be_clickable((By.ID, "ok-button"))).click()
     wait.until(EC.element_to_be_clickable((By.NAME, "Submit"))).click()
-
 
     wait.until(EC.visibility_of_element_located((By.XPATH, "//div[@id='tasks']")))
