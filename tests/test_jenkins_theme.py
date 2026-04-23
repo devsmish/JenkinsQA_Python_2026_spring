@@ -30,5 +30,5 @@ def test_new_theme_dropdown(browser):
     dark_theme = theme_select.find_element(By.XPATH, "//option[@value='dark']")
     dark_theme.click()
 
-    time.sleep(10)
+    time.sleep(15)
 
