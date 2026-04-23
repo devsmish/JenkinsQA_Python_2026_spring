@@ -60,7 +60,7 @@ def test_delete_job(browser, click, fill, check_visibility):
     create_job(click, fill, check_visibility, current_project_name)
     browser.get(browser.current_url + f"/job/{current_project_name}/")
 
-    click(DELETE_JOB, 2)
+    click(DELETE_JOB, 5)
     click(CONFIRM_DELETE_BUTTON, 5)
 
     browser.get(browser.current_url + f"/job/{current_project_name}/")
