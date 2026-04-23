@@ -119,9 +119,6 @@ def test_create_folder_with_invalid_characters_negative(browser, character):
 
     # кнопка ниже по логике должна быть неактивна и тест бы закончился тут
     browser.find_element(By.ID, "ok-button").click()
-
-    h1_text = WebDriverWait(browser, 5).until(
-        EC.visibility_of_element_located((By.TAG_NAME, "h1"))
-    ).text
-    assert h1_text == "Error"
+    WebDriverWait(browser,5).until_not(EC.title_contains("New Item"))
+    assert browser.find_element(By.TAG_NAME, "h1").text == "Error"
     assert browser.find_element(By.TAG_NAME, "p").text == expected_error
