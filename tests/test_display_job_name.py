@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
 def create_new_item_name(browser):
     random_name = "folder_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
 
@@ -24,6 +23,8 @@ def create_new_pipeline(browser):
     wait.until(EC.element_to_be_clickable((By.ID, "ok-button"))).click()
 
     wait.until(EC.element_to_be_clickable((By.NAME, "Submit"))).click()
+
+    wait = WebDriverWait(browser, 5)
 
     wait.until(EC.element_to_be_clickable((By.XPATH, "//span[@class='jenkins-mobile-hide']"))).click()
 
