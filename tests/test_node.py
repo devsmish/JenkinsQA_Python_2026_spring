@@ -1,5 +1,7 @@
 import pytest
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 new_node_name = "New Test Node"
 description = "Use only for urgent tasks"
@@ -18,10 +20,17 @@ def create_new_node(browser):
 
     browser.find_element(By.XPATH, "//a[@href='../computer/%s/']" % new_node_name.replace(" ", "%20"))
 
-def go_to_node_management_page(browser):
-        browser.find_element(By.ID, "root-action-ManageJenkinsAction").click()
-        browser.find_element(By.XPATH, "//a[@href='computer']").click()
-        browser.find_element(By.XPATH, "//a[@href='../computer/%s/']" % new_node_name.replace(" ", "%20")).click()
+@pytest.fixture
+def go_to_node_management_page(browser, create_new_node):
+    browser.find_element(By.ID, "root-action-ManageJenkinsAction").click()
+    browser.find_element(By.XPATH, "//a[@href='computer']").click()
+    browser.find_element(By.XPATH, "//a[@href='../computer/%s/']" % new_node_name.replace(" ", "%20")).click()
+
+@pytest.fixture
+def mark_node_offline(browser, go_to_node_management_page):
+
+    browser.find_element(By.XPATH, "//form [@action='markOffline']").click()
+    browser.find_element(By.XPATH, "//*[@id='main-panel']/form/p/button").click()
 
 def test_create_node(browser):
 
@@ -38,14 +47,11 @@ def test_create_node(browser):
 
     assert new_node_name == created_node
 
-def test_node_configuration(browser, create_new_node):
+def test_node_configuration(browser, go_to_node_management_page):
 
     expect_attributes= [description, labels]
     actual_attributes = []
 
-    browser.find_element(By.ID, "root-action-ManageJenkinsAction").click()
-    browser.find_element(By.XPATH, "//a[@href='computer']").click()
-    browser.find_element(By.XPATH, "//a[@href='../computer/%s/']" % new_node_name.replace(" ", "%20")).click()
     browser.find_element(By.XPATH, "//a[@href='/computer/%s/configure']" % new_node_name.replace(" ", "%20")).click()
     browser.find_element(By.XPATH, "//textarea[@name='nodeDescription']").send_keys(description)
     browser.find_element(By.XPATH, "//input[@name='_.remoteFS']").send_keys(dir)
@@ -59,12 +65,17 @@ def test_node_configuration(browser, create_new_node):
 
     assert actual_attributes == expect_attributes
 
-def test_mark_node_offline(browser, create_new_node):
-
-    go_to_node_management_page(browser)
+def test_mark_node_offline(browser, go_to_node_management_page):
 
     browser.find_element(By.XPATH, "//form [@action='markOffline']").click()
     browser.find_element(By.XPATH, "//*[@id='main-panel']/form/p/button").click()
 
     expected_text = browser.find_element(By.CSS_SELECTOR, ".message")
     assert expected_text.text == "Disconnected by admin"
+
+def test_bring_node_online(browser, mark_node_offline):
+
+    WebDriverWait(browser, 5).until(
+        EC.element_to_be_clickable((By.CLASS_NAME, "jenkins-button--primary"))).click()
+
+    assert browser.find_element(By.XPATH, "//form [@action='markOffline']").text == "Mark this node temporarily offline"
