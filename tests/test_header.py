@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
 
+
 def test_header_quick_change_theme(browser):
 
     user_menu = browser.find_element(By.ID, "root-action-UserAction")
