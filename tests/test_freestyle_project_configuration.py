@@ -1,4 +1,6 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def create_freestyle_project(driver):
@@ -13,7 +15,13 @@ def create_freestyle_project(driver):
 def test_disable_active_project(browser):
     create_freestyle_project(browser)
 
-    browser.find_element(By.ID, 'jenkins-head-icon').click()
+    WebDriverWait(browser, 10).until(
+        EC.visibility_of_element_located((By.ID, "main-panel"))
+    )
+
+    WebDriverWait(browser, 10).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, "a.app-jenkins-logo"))
+    ).click()
 
     browser.find_element(By.CSS_SELECTOR, 'button.jenkins-menu-dropdown-chevron').click()
     browser.find_element(By.XPATH, "//a[contains(@href, 'configure')]").click()
