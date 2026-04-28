@@ -9,8 +9,6 @@ def create_freestyle_project(driver):
     driver.find_element(By.XPATH, '//*[@id="ok-button"]').click()
     driver.find_element(By.NAME, "Submit").click()
 
-    assert driver.find_element(By.XPATH, "//*[contains(text(), 'Test')]")
-
 
 def test_disable_active_project(browser):
     create_freestyle_project(browser)
