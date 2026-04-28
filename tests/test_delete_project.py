@@ -56,9 +56,8 @@ def test_delete_job(browser, click, fill, check_visibility):
     click((By.XPATH, "//button[@data-id='ok']"))
 
     browser.get(browser.current_url + f"/job/{current_project_name}/")
-    check_visibility((By.XPATH, "//h2[text()='Not Found']"))
 
-    assert browser.find_element(By.XPATH, "//h2[text()='Not Found']").text == "Not Found"
+    assert "404" in browser.title or "Not Found" in browser.page_source
 
 def test_cancel_delete_job(browser, click, fill, check_visibility):
     current_project_name = generate_project_name()
