@@ -22,3 +22,15 @@ def test_change_theme_dropdown(browser):
     assert WebDriverWait(browser, 10).until(
         EC.presence_of_element_located((By.XPATH, "//html[@data-theme='dark']"))
     )
+
+    theme_select = WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, "select#account-theme-picker"))
+    )
+    theme_element.click()
+    light_option = theme_element.find_element(By.XPATH, "//option[text()='Light']")
+    light_option.click()
+    WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//html[@data-theme='none']"))
+    )
+
+
