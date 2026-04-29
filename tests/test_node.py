@@ -85,7 +85,7 @@ def test_bring_node_online(browser, mark_node_offline):
 
 def test_delete_node(browser, bring_node_online):
 
-    WebDriverWait(browser, 5).until(EC.element_to_be_clickable((By.CLASS_NAME, "icon-edit-delete.icon-md"))).click()
+    WebDriverWait(browser, 5).until(EC.element_to_be_clickable((By.CLASS_NAME, "icon-edit-delete"))).click()
     WebDriverWait(browser, 5).until(EC.element_to_be_clickable((By.XPATH, "//button [@data-id='ok']"))).click()
 
     actual_node_list = browser.find_elements(By.XPATH, "//a[@class = 'jenkins-table__link model-link inside']")
