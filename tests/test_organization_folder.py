@@ -21,7 +21,6 @@ def test_create_org_folder(browser):
 
 @pytest.mark.dependency(depends=["test_create_org_folder"])
 def test_open_configuration_1(browser):
-# Verify that the user can open the "General" settings using the drop-down menu
 
     browser.find_element(By.CLASS_NAME, "jenkins-mobile-hide").click()
     browser.find_element(By.CLASS_NAME, "jenkins-menu-dropdown-chevron").click()
