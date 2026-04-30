@@ -8,7 +8,6 @@ SCM_TITLE_EXPECTED = "Source Code Management"
 
 
 def wait_until_clickable(browser: WebDriver, locator: tuple[str, str], timeout=10):
-    """Ожидает кликабельности элемента и возвращает его."""
     return WebDriverWait(browser, timeout).until(
         EC.element_to_be_clickable(locator)
     )
