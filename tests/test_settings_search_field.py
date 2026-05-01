@@ -16,3 +16,15 @@ def test_checking_the_dropdown_when_entering_one_letter(browser):
     )
 
     assert len(items) > 1
+
+
+def test_checking_the_dropdown_when_entering_full_name_settings(browser):
+    browser.find_element(By.ID, 'root-action-ManageJenkinsAction').click()
+
+    _get_field_search(browser).send_keys('Security')
+    item = browser.find_element(
+        By.XPATH,
+        '//*[contains(@class,"jenkins-search__results-container--visible")]//a[normalize-space()="Security"]'
+    )
+
+    assert item.text.strip() == 'Security'
