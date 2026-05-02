@@ -29,9 +29,9 @@ def test_select_system_theme_by_quick_change(browser):
 
 def test_not_apply_change_theme(browser):
 
-    browser.find_element(By.ID, 'root-action-UserAction').click()
+    ActionChains(browser).move_to_element(browser.find_element(By.ID, 'root-action-UserAction')).perform()
+    browser.find_element(By.XPATH, "//div[contains(@class, 'jenkins-dropdown')]//*[normalize-space()='Appearance']").click()
 
-    browser.find_element(By.XPATH, '//*[@id="tasks"]/div[5]/span/a').click()
     browser.find_element(By.XPATH, f'//label[./div[@data-theme = "{standard_themes_values.get("dark")}"]]').click()
 
     browser.find_element(By.XPATH, f'//a[./span/text()="Profile"]').click()
