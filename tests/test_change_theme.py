@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -23,3 +25,17 @@ def test_select_system_theme_by_quick_change(browser):
     browser.find_element(By.CSS_SELECTOR, locator).click()
 
     assert 'System' in browser.find_element(By.CSS_SELECTOR, 'label[for="account-theme-picker"] > span').text
+
+
+def test_not_apply_change_theme(browser):
+
+    browser.find_element(By.ID, 'root-action-UserAction').click()
+
+    browser.find_element(By.XPATH, '//a[span and contains(@href, "appearance")]').click()
+    browser.find_element(By.XPATH, f'//label[./div[@data-theme = "dark"]]').click()
+
+    browser.find_element(By.XPATH, f'//a[./span/text()="Profile"]').click()
+
+
+    browser.find_element(By.XPATH, '//a[span and contains(@href, "appearance")]').click()
+    assert browser.find_element(By.TAG_NAME, 'html').get_attribute("data-theme") == standard_themes_values.get("light")
