@@ -36,8 +36,9 @@ def test_disable_active_project(browser):
         EC.element_to_be_clickable((By.CSS_SELECTOR, "button.jenkins-menu-dropdown-chevron"))
     ).click()
     wait.until(
-        EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, 'configure')]"))
-    ).click()
+        EC.presence_of_element_located((By.XPATH, "//a[contains(@href, 'configure')]"))
+    )
+    browser.find_element(By.XPATH, "//a[contains(@href, 'configure')]").click()
 
     browser.find_element(By.CSS_SELECTOR, 'label[for="enable-disable-project"]').click()
     browser.find_element(By.NAME, "Submit").click()
