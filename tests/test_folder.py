@@ -1,5 +1,3 @@
-import time
-
 import pytest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -75,7 +73,6 @@ def test_create_new_folder(browser):
 
 @pytest.mark.dependency(depends=["test_create_folder"])
 def test_create_nested_folder(browser):
-    time.sleep(10)
     browser.find_element(By.XPATH, f"//a[contains(@href, '/{FOLDER_NAME}')]").click()
 
     create_folder(browser, SECOND_FOLDER_NAME)
