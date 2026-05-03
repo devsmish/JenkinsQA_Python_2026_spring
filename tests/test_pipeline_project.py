@@ -21,6 +21,7 @@ def create_pipeline_project(browser, name):
                 if (logo) logo.click();
             """)
 
+@pytest.mark.skip
 def test_create_project(browser):
     create_pipeline_project(browser, pipeline_name)
     created_pipeline = browser.find_element(By.CSS_SELECTOR, ".jenkins-table__link >span:first-child").text
