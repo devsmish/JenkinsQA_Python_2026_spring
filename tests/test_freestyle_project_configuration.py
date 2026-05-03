@@ -25,16 +25,19 @@ def test_create_freestyle_project(browser):
 
 @pytest.mark.dependency(depends=["test_create_freestyle_project"])
 def test_disable_active_project(browser):
-    WebDriverWait(browser, 10).until(
-        EC.visibility_of_element_located((By.ID, "main-panel"))
-    )
+    wait = WebDriverWait(browser, 10)
 
-    WebDriverWait(browser, 10).until(
+    wait.until(EC.visibility_of_element_located((By.ID, "main-panel")))
+    wait.until(
         EC.element_to_be_clickable((By.CSS_SELECTOR, "a.app-jenkins-logo"))
     ).click()
 
-    browser.find_element(By.CSS_SELECTOR, 'button.jenkins-menu-dropdown-chevron').click()
-    browser.find_element(By.XPATH, "//a[contains(@href, 'configure')]").click()
+    wait.until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, "button.jenkins-menu-dropdown-chevron"))
+    ).click()
+    wait.until(
+        EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, 'configure')]"))
+    ).click()
 
     browser.find_element(By.CSS_SELECTOR, 'label[for="enable-disable-project"]').click()
     browser.find_element(By.NAME, "Submit").click()
