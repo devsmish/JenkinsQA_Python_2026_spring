@@ -33,5 +33,5 @@ def test_copy_from_existing_pipeline(browser):
     browser.find_element(By.XPATH, "//button[@id='ok-button']").click()
     browser.find_element(By.XPATH, "//button[normalize-space()='Save']").click()
 
-    result = browser.find_element(By.XPATH, "//div[@id='description-content']").text
-    assert result == "my_third_pipeline"
+    actual_description = browser.find_element(By.XPATH, "//div[@id='description-content']").text
+    assert actual_description == "my_third_pipeline"
