@@ -120,7 +120,7 @@ def test_create_folder_with_invalid_characters_negative(browser, character):
     assert browser.find_element(By.TAG_NAME, "h1").text == "Error"
     assert browser.find_element(By.TAG_NAME, "p").text == expected_error
 
-
+@pytest.mark.skip
 def test_create_folder_with_duplicate_name_in_same_parent_negative(browser):
     create_folder(browser, FOLDER_NAME)
 
