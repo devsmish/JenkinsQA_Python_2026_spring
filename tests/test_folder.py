@@ -168,8 +168,9 @@ def test_create_test_folder(browser):
     wait.until(
         EC.element_to_be_clickable((By.ID, 'jenkins-head-icon'))).click()
 
-    new_folder = wait.until(EC.visibility_of_element_located((By.LINK_TEXT, 'My first folder')))
-    assert new_folder.is_displayed()
+    test_folder = wait.until(
+        EC.visibility_of_element_located((By.LINK_TEXT, 'My first folder')))
+    assert test_folder.text == 'My first folder'
 
 
 @pytest.mark.dependency(depends=['test_create_test_folder'])
@@ -200,5 +201,6 @@ def test_create_folder_from_copy(browser):
     wait.until(
         EC.element_to_be_clickable((By.ID, 'jenkins-head-icon'))).click()
 
-    folder = wait.until(EC.visibility_of_element_located((By.LINK_TEXT, 'Folder from copy')))
-    assert folder.is_displayed()
+    new_folder = wait.until(
+        EC.visibility_of_element_located((By.LINK_TEXT, 'Folder from copy')))
+    assert new_folder.text == 'Folder from copy'
