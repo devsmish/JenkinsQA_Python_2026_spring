@@ -19,5 +19,4 @@ def test_new_Pipeline(browser):
     wait = WebDriverWait(browser, 10)
     label=wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@href='job/test_1/']")))
 
-    #label=browser.find_element(By.XPATH, "//*[@href='job/test_1/']")
     assert label.text == "test_1"
