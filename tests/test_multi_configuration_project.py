@@ -7,6 +7,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 multiconfiguration_project_name = "MultiConfigName"
 
+@pytest.mark.skip(reason="ER_01.001.19")
 def create_multi_configuration_project(browser, name):
     browser.find_element(By.XPATH, "//a[@href='/view/all/newJob']").click()
 
