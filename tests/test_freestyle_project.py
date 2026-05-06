@@ -51,5 +51,5 @@ def test_special_characters_in_rename_field(browser):
         browser.find_element(By.CSS_SELECTOR, '[checkdependson="newName"]').send_keys(special_character)
         browser.find_element(By.ID, 'main-panel').click()
 
-        error = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'error'))).text
+        error = wait.until(EC.visibility_of_element_located((By.XPATH, f'//div[@class="error"][contains(text(), "{special_character}")]'))).text
         assert error == f"‘{special_character}’ is an unsafe character"
