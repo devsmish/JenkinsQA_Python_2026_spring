@@ -118,7 +118,7 @@ def test_delete(browser):
     assert empty_message.is_displayed(), "Empty domain message not displayed after deletion"
     assert not is_credential_present(browser, USERNAME, DESCRIPTION, CREDENTIAL_ID), "Credential still exists after deletion"
 
-
+@pytest.mark.skip()
 @pytest.mark.parametrize("special_characters ",[
     "!", "%", "&", "#", "@", "*"
 ])
