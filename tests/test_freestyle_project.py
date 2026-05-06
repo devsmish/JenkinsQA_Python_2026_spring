@@ -23,9 +23,18 @@ def test_create_freestyle_project(browser):
 @pytest.mark.dependency(depends=["test_create_freestyle_project"])
 def test_rename_freestyle_project_page_from_dashboard(browser):
     wait = WebDriverWait(browser, 5)
-    wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'app-jenkins-logo'))).click()
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, f'[href="job/{FREESTYLE_PROJECT_NAME}/"]>.jenkins-menu-dropdown-chevron'))).click()
     wait.until(EC.visibility_of_element_located((By.PARTIAL_LINK_TEXT, 'Rename'))).click()
 
     rename_page_title = wait.until(EC.visibility_of_element_located((By.TAG_NAME, 'h1'))).text
+    assert rename_page_title == f'Rename Project {FREESTYLE_PROJECT_NAME}'
+
+
+@pytest.mark.dependency(depends=["test_create_freestyle_project"])
+def test_rename_freestyle_project_page_from_project_page(browser):
+    wait = WebDriverWait(browser, 5)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, f'[href="job/{FREESTYLE_PROJECT_NAME}/"]'))).click()
+    wait.until(EC.visibility_of_element_located((By.PARTIAL_LINK_TEXT, 'Rename'))).click()
+
+    rename_page_title = browser.find_element(By.TAG_NAME, 'h1').text
     assert rename_page_title == f'Rename Project {FREESTYLE_PROJECT_NAME}'
