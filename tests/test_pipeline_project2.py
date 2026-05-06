@@ -18,8 +18,9 @@ def test_pipeline_project2(browser):
 
     wait.until(EC.element_to_be_clickable((By.NAME,"Submit"))).click()
 
-    wait.until(EC.url_changes(browser.current_url))
-    wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@class='app-jenkins-logo']"))).click()
+    wait.until(EC.visibility_of_element_located((By.XPATH, "//h2[normalize-space()='Permalinks']")))
+    browser.find_element(By.XPATH, "//*[@class='app-jenkins-logo']").click()
+    #wait.until(EC.element_to_be_clickable((By.XPATH, "//*[@class='app-jenkins-logo']"))).click()
 
     wait = WebDriverWait(browser, 10)
     label=wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@href='job/test_1/']"))).text
