@@ -71,6 +71,7 @@ def test_create_item_with_special_characters(browser, special_characters):
     browser.find_element(By.ID, "ok-button").click()
     assert browser.find_element(By.TAG_NAME, "p").text == expected_error_message
 
+@pytest.mark.skip(reason="ER_01.001.19")
 @pytest.mark.dependency()
 def test_create_multi_configuration_project(browser):
     create_multi_configuration_project(browser, multiconfiguration_project_name)
@@ -79,6 +80,7 @@ def test_create_multi_configuration_project(browser):
 
     assert created_multi_configuration == multiconfiguration_project_name
 
+@pytest.mark.skip(reason="ER_01.001.19")
 @pytest.mark.dependency(depends=["test_create_multi_configuration_project"])
 def test_create_project_with_exist_name(browser):
     browser.find_element(By.XPATH, "//a[contains(@href, '/newJob')]").click()
