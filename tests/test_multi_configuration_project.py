@@ -113,3 +113,22 @@ def test_search_created_project(browser):
 
     assert WebDriverWait(browser, 10).until(
          EC.visibility_of_element_located((By.TAG_NAME, "h1"))).text == multiconfiguration_project_name
+
+@pytest.mark.dependency(depends=["test_create_multi_configuration_project"])
+def test_check_delete_view_on_dashboard(browser):
+    view_name = "NewView"
+
+    browser.find_element(By.CLASS_NAME, "addTab").click()
+    browser.find_element(By.ID, "name").send_keys(view_name)
+    browser.find_element(By.CSS_SELECTOR, "label[for='hudson.model.MyView']").click()
+    browser.find_element(By.ID, "ok").click()
+
+    browser.find_element(By.CSS_SELECTOR, "a[data-title='Delete View']").click()
+    WebDriverWait(browser, 10).until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, "button[data-id='ok']"))).click()
+
+    view_panel_elements = WebDriverWait(browser, 10).until(
+         EC.visibility_of_element_located((By.CLASS_NAME, "tabBarFrame"))).text
+
+    assert view_name not in view_panel_elements
