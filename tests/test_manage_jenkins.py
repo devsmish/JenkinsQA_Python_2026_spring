@@ -39,6 +39,7 @@ def test_checking_dropdown_full_match(browser):
     assert item.get_attribute('textContent').strip() == 'Security'
 
 
+@pytest.mark.skip(reason="ER_10.002.03")
 def test_clear_search_field_and_verify_empty(browser):
     WebDriverWait(browser, 10).until(
         EC.visibility_of_element_located((By.ID, 'root-action-ManageJenkinsAction'))

@@ -74,6 +74,23 @@ def test_add_description_to_existing_freestyle_project(browser):
     )
 )
 
+
+@pytest.mark.dependency(depends=["test_add_description_to_existing_freestyle_project"])
+def test_edit_description_of_freestyle_project(browser):
+    wait = WebDriverWait(browser, 10)
+
+    browser.find_element(By.ID, "description-link").click()
+    browser.find_element(By.NAME, "description").clear()
+    browser.find_element(By.NAME, "description").send_keys("Updated description")
+    browser.find_element(By.NAME, "Submit").click()
+
+    assert wait.until(
+        EC.visibility_of_element_located(
+            (By.XPATH, "//*[@id='description-content' and .='Updated description']")
+        )
+    )
+
+
 def test_build_steps_field_is_available(browser):
     browser.find_element(By.XPATH, '//*[@id="tasks"]//a').click()
     input_name = browser.find_element(By.ID, "name")
