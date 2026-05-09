@@ -104,9 +104,13 @@ def test_search_created_project(browser):
     browser.find_element(By.ID, "root-action-SearchAction").click()
 
     browser.find_element(By.ID, "command-bar").send_keys(multiconfiguration_project_name)
+
     WebDriverWait(browser, 10).until(
         EC.element_to_be_clickable(
-            (By.XPATH, "//a[contains(@class, 'jenkins-command-palette__results__item')]"))).click()
+            (By.XPATH, f"//a[contains(@href, '/job/{multiconfiguration_project_name}/')]"))).click()
+
+    WebDriverWait(browser, 10).until(
+        EC.url_contains(f"/job/{multiconfiguration_project_name}/"))
 
     assert WebDriverWait(browser, 10).until(
          EC.visibility_of_element_located((By.TAG_NAME, "h1"))).text == multiconfiguration_project_name
