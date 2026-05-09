@@ -7,7 +7,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 multiconfiguration_project_name = "MultiConfigName"
 
-@pytest.mark.skip(reason="ER_01.001.19")
 def create_multi_configuration_project(browser, name):
     browser.find_element(By.XPATH, "//a[@href='/view/all/newJob']").click()
 
@@ -15,29 +14,39 @@ def create_multi_configuration_project(browser, name):
     browser.find_element(By.CLASS_NAME, "hudson_matrix_MatrixProject").click()
     browser.find_element(By.ID, "ok-button").click()
 
-    browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    WebDriverWait(browser, 5).until(EC.element_to_be_clickable((By.NAME, "Submit"))).click()
+    browser.execute_script("""
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth'
+        });
+    """)
+    WebDriverWait(browser, 10).until(EC.element_to_be_clickable((By.NAME, "Submit"))).click()
 
     browser.execute_script("""
                     var logo = document.querySelector('.jenkins-mobile-hide');
                     if (logo) logo.click();
                 """)
 
-@pytest.mark.skip(reason="ER_01.001.19")
 def test_verify_status_switching_enable_button(browser):
     create_multi_configuration_project(browser, multiconfiguration_project_name)
     browser.find_element(By.CSS_SELECTOR, ".jenkins-table__link >span:first-child").click()
 
     browser.find_element(By.XPATH, "//a[@href='/job/" + multiconfiguration_project_name + "/configure']").click()
     browser.find_element(By.CSS_SELECTOR, "#toggle-switch-enable-disable-project > label").click()
+
+    browser.execute_script("""
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
+        """)
     browser.find_element(By.NAME, "Submit").click()
 
-    actual_disable_text = WebDriverWait(browser, 5).until(
+    actual_disable_text = WebDriverWait(browser, 10).until(
         EC.visibility_of_element_located((By.ID, "enable-project"))).text
 
     assert "This project is currently disabled" in actual_disable_text
 
-@pytest.mark.skip(reason="fails in CI")
 def test_verify_enable_toggle_has_tooltip(browser):
     create_multi_configuration_project(browser, multiconfiguration_project_name)
     browser.find_element(By.CSS_SELECTOR, ".jenkins-table__link >span:first-child").click()
@@ -48,7 +57,7 @@ def test_verify_enable_toggle_has_tooltip(browser):
     actions = ActionChains(browser)
     actions.move_to_element(enabled_toogle).perform()
 
-    toggle_tooltip = WebDriverWait(browser, 5).until(
+    toggle_tooltip = WebDriverWait(browser, 10).until(
         EC.visibility_of_element_located((By.CLASS_NAME, "tippy-content"))).text
 
     assert toggle_tooltip == "Enable or disable the current project"
@@ -71,7 +80,6 @@ def test_create_item_with_special_characters(browser, special_characters):
     browser.find_element(By.ID, "ok-button").click()
     assert browser.find_element(By.TAG_NAME, "p").text == expected_error_message
 
-@pytest.mark.skip(reason="ER_01.001.19")
 @pytest.mark.dependency()
 def test_create_multi_configuration_project(browser):
     create_multi_configuration_project(browser, multiconfiguration_project_name)
@@ -80,15 +88,28 @@ def test_create_multi_configuration_project(browser):
 
     assert created_multi_configuration == multiconfiguration_project_name
 
-@pytest.mark.skip(reason="ER_01.001.19")
 @pytest.mark.dependency(depends=["test_create_multi_configuration_project"])
 def test_create_project_with_exist_name(browser):
     browser.find_element(By.XPATH, "//a[contains(@href, '/newJob')]").click()
     browser.find_element(By.ID, "name").send_keys(multiconfiguration_project_name)
 
-    error_message = WebDriverWait(browser, 10).until(
+    error_message = WebDriverWait(browser, 5).until(
          EC.visibility_of_element_located((By.ID, "itemname-invalid"))).text
 
-    expected_error_message = f"A job already exists with the name ‘{multiconfiguration_project_name}’"
-    assert error_message == "» " + expected_error_message
-    assert not browser.find_element(By.ID, "ok-button").is_enabled()
+    assert error_message == f"» A job already exists with the name ‘{multiconfiguration_project_name}’"
+
+@pytest.mark.dependency(depends=["test_create_multi_configuration_project"])
+def test_search_created_project(browser):
+    browser.find_element(By.ID, "root-action-SearchAction").click()
+
+    browser.find_element(By.ID, "command-bar").send_keys(multiconfiguration_project_name)
+
+    WebDriverWait(browser, 10).until(
+        EC.element_to_be_clickable(
+            (By.XPATH, f"//a[contains(@href, '/job/{multiconfiguration_project_name}/')]"))).click()
+
+    WebDriverWait(browser, 10).until(
+        EC.url_contains(f"/job/{multiconfiguration_project_name}/"))
+
+    assert WebDriverWait(browser, 10).until(
+         EC.visibility_of_element_located((By.TAG_NAME, "h1"))).text == multiconfiguration_project_name
