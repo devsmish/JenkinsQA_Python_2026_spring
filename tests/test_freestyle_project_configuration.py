@@ -47,6 +47,28 @@ def test_disable_active_project(browser):
         By.XPATH, "//*[contains(text(), 'This project is currently disabled')]"
     )
 
+@pytest.mark.dependency(depends=["test_disable_active_project"])
+def test_enable_disabled_project_using_enable_button(browser):
+    wait = WebDriverWait(browser, 10)
+
+    wait.until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, "button.jenkins-menu-dropdown-chevron"))
+    ).click()
+    wait.until(
+        EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, 'configure')]"))
+    ).click()
+    browser.find_element(By.XPATH, "//a[@href='/job/Test/']").click()
+
+    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[name='Submit'][value='Enable']"))).click()
+    wait.until(
+        EC.invisibility_of_element_located(
+            (By.XPATH, "//*[contains(text(), 'This project is currently disabled')]")
+        )
+    )
+    browser.find_element(By.LINK_TEXT, "Configure").click()
+
+    assert browser.find_element (By.ID, "enable-disable-project").is_selected()
+
 
 def test_access_scm_title(browser):
     browser.find_element(By.XPATH, "//a[@href='newJob']").click()
