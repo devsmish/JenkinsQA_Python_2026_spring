@@ -1,3 +1,4 @@
+import selenium.webdriver.chrome.webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
@@ -47,7 +48,7 @@ def test_build_queue_visibility(browser):
     item_name = "job"
     count_jobs = range(1, 4)
     for i in count_jobs:
-        create_freestyle_project_with_timer(browser, item_name + str(i))
+        create_freestyle_project_with_timer(browser, item_name + str(i), "sleep 60")
 
     for _ in range(2):
         for i in count_jobs:
@@ -60,7 +61,20 @@ def test_build_queue_visibility(browser):
     assert all(item in list_items for item in target_item)
 
 
-def create_freestyle_project_with_timer(browser, name_project: str):
+def test_build_history_display_status(browser: selenium.webdriver.chrome.webdriver.WebDriver):
+    name_jobs = ['job4', 'job5', 'job6']
+
+    for name in name_jobs:
+        create_freestyle_project_with_timer(browser, name, "echo $EXECUTOR_NUMBER\npwd\nls -lsa /")
+        browser.find_element(By.XPATH, f"//tr/td[7]//a[@tooltip='Schedule a Build for {name}']").click()
+
+    browser.find_element(By.XPATH, "//a[@href='/view/all/builds']").click()
+    job = browser.find_elements(By.XPATH, "//tbody/tr/td[contains(@class, 'jenkins-table__icon')]/div")[0].get_attribute('innerHTML')
+
+    assert 'id="blue"' in job or 'id="red"' in job
+
+
+def create_freestyle_project_with_timer(browser, name_project: str, command_shell: str):
     wait = WebDriverWait(browser, 5)
 
     wait.until(expected_conditions.element_to_be_clickable((By.XPATH, "//a[@href='/view/all/newJob']"))).click()
@@ -77,7 +91,7 @@ def create_freestyle_project_with_timer(browser, name_project: str):
 
     ActionChains(browser)\
         .move_to_element(browser.find_element(By.XPATH, "//div[contains(@class, 'cm-s-default')]"))\
-        .click().send_keys("sleep 60").perform()
+        .click().send_keys(command_shell).perform()
 
     browser.find_element(By.NAME, "Submit").click()
     wait.until(expected_conditions.visibility_of_element_located((By.XPATH, "//*[text()='Permalinks']")))
