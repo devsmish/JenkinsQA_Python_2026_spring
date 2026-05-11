@@ -1,10 +1,35 @@
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
-# TC_10.001.01 | Manage Jenkins > Visibility and clickability > Verify navigation to manage Jenkins page
+
+def create_freestyle_project_with_timer(browser, name_project: str):
+    wait = WebDriverWait(browser, 5)
+
+    wait.until(expected_conditions.element_to_be_clickable((By.XPATH, "//a[@href='/view/all/newJob']"))).click()
+    browser.find_element(By.ID, "name").send_keys(name_project)
+    wait.until(expected_conditions.element_to_be_clickable((By.XPATH, "//span[text()='Freestyle project']"))).click()
+    browser.find_element(By.XPATH, '//*[@id="ok-button"]').click()
+
+    button_add_build_step = browser.find_element(By.XPATH, "//button[text()='Add build step']")
+    browser.execute_script("arguments[0].scrollIntoView(true);", button_add_build_step)
+    button_add_build_step.click()
+
+    wait.until(expected_conditions.visibility_of_element_located((By.CLASS_NAME, "jenkins-dropdown__item")))
+    browser.find_element(By.XPATH, "//button[normalize-space()='Execute shell']").click()
+
+    ActionChains(browser)\
+        .move_to_element(browser.find_element(By.XPATH, "//div[contains(@class, 'cm-s-default')]"))\
+        .click().send_keys("sleep 60").perform()
+
+    browser.find_element(By.NAME, "Submit").click()
+    wait.until(expected_conditions.visibility_of_element_located((By.XPATH, "//*[text()='Permalinks']")))
+    browser.find_element(By.CLASS_NAME, "app-jenkins-logo").click()
+
+
+
 def test_verify_navigation_to_manage_page(browser):
     wait = WebDriverWait(browser, 10)
 
@@ -15,14 +40,12 @@ def test_verify_navigation_to_manage_page(browser):
     assert "/manage" in browser.current_url
 
 
-# TC_10.001.02 | Manage Jenkins > Visibility and clickability > Verify "Manage Jenkins" option is visible on Dashboard
 def test_verify_icon_is_visible(browser):
     wait = WebDriverWait(browser, 10)
 
     assert wait.until(EC.visibility_of_element_located((By.ID, "root-action-ManageJenkinsAction"))).is_displayed()
 
 
-# TC_10.001.03 | Manage Jenkins > Visibility and clickability > Verify "Manage Jenkins" icon tooltip and clickability on hover
 def test_verify_tooltip_and_clickable(browser):
     wait = WebDriverWait(browser, 10)
     actions = ActionChains(browser)
@@ -44,4 +67,19 @@ def test_verify_tooltip_and_clickable(browser):
     assert cursor == "pointer"
 
 
+def test_build_queue_visibility(browser):
 
+    item_name = "job"
+    count_jobs = range(1, 4)
+    for i in count_jobs:
+        create_freestyle_project_with_timer(browser, item_name + str(i))
+
+    for _ in range(2):
+        for i in count_jobs:
+            browser.find_element(By.XPATH, f"//tr/td[7]//a[@tooltip='Schedule a Build for {item_name}{i}']").click()
+
+    list_items = browser.find_elements(By.XPATH, f"//div[@class='pane-content']//tr/td/a[contains(text(),'{item_name}')]")
+    list_items = [item.text for item in list_items]
+    target_item = [f"{item_name}{i}" for i in count_jobs]
+
+    assert all(item in list_items for item in target_item)
