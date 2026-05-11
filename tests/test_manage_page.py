@@ -49,16 +49,16 @@ def test_build_queue_visibility(browser):
     item_name = ["job1", "job2", "job3"]
 
     for job_name in item_name:
-        HomePage(browser) \
-            .new_item_click() \
-            .set_project_name(job_name) \
-            .select_freestyle_and_ok_click() \
-            .button_add_build_step_click() \
-            .select_option_execute_shell_in_add_build_step_click() \
-            .set_shell_script("echo $EXECUTOR_NUMBER\npwd\nls -lsa /\nsleep 60") \
-            .save() \
-            .jenkins_logo_click() \
-            .schedule_build_click(job_name)
+        (HomePage(browser)
+         .new_item_click()
+         .set_project_name(job_name)
+         .select_freestyle_and_ok_click()
+         .button_add_build_step_click()
+         .select_option_execute_shell_in_add_build_step_click()
+         .set_shell_script("echo $EXECUTOR_NUMBER\npwd\nls -lsa /\nsleep 60")
+         .save()
+         .jenkins_logo_click()
+         .schedule_build_click(job_name))
 
     list_jobs_name = HomePage(browser).get_names_jobs_list_build_queue()
 

@@ -31,8 +31,8 @@ class FreestyleConfigPage(BasePage):
         return self
 
     def set_shell_script(self, command_shell):
-        ActionChains(self.driver) \
-            .move_to_element(self.driver.find_element(By.XPATH, "//div[contains(@class, 'cm-s-default')]")) \
-            .click().send_keys(command_shell).perform()
+        (ActionChains(self.driver)
+         .move_to_element(self.driver.find_element(By.XPATH, "//div[contains(@class, 'cm-s-default')]"))
+         .click().send_keys(command_shell).perform())
 
         return self
