@@ -22,25 +22,11 @@ class HomePage(BasePage):
 
         return self
 
-    def dropdown_menu_item_click(self, name):
-        items = {
-            "Theme": {},
-            "My views": {},
-            "Account": {},
-            "Appearance": {},
-            "Preferences": {},
-            "Security": {},
-            "Experiments": {},
-            "Credentials": {},
-            "Sign out": {
-                "xpath": '//div[@class="jenkins-dropdown"]//a[@href="/logout"]',
-                "result page": LoginPage,
-            },
-        }
-
+    def dropdown_menu_sign_out_click(self):
         self.wait10.until(
-            EC.element_to_be_clickable((By.XPATH, items[name]["xpath"]))
+            EC.element_to_be_clickable(
+                (By.XPATH, '//div[@class="jenkins-dropdown"]//a[@href="/logout"]')
+            )
         ).click()
-        current_page = items[name]["result page"]
 
-        return current_page(self.driver)
+        return LoginPage(self.driver)

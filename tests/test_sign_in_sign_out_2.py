@@ -12,7 +12,7 @@ def test_sign_out(browser):
     login_page = (
         HomePage(browser)
         .show_dropdown_menu_from_profile_icon()
-        .dropdown_menu_item_click("Sign out")
+        .dropdown_menu_sign_out_click()
     )
 
     assert login_page.get_title() == LOGIN_PAGE_TITLE
