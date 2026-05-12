@@ -15,6 +15,14 @@ class HomePage(BasePage):
 
         return NewItemPage(self.driver)
 
+
+    def get_project_names_list(self):
+        project_elements = self.driver.find_elements(By.CLASS_NAME, "jenkins-table__link")
+        project_names = [element.text for element in project_elements]
+
+        return project_names
+
+      
     def show_dropdown_menu_from_profile_icon(self):
         ActionChains(self.driver).move_to_element(
             self.driver.find_element(By.ID, "root-action-UserAction")
@@ -22,6 +30,7 @@ class HomePage(BasePage):
 
         return self
 
+      
     def dropdown_menu_sign_out_click(self):
         self.wait10.until(
             EC.element_to_be_clickable(
