@@ -1,14 +1,9 @@
-from os import wait
-
 import pytest
-from selenium.webdriver.common import keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
 
 PIPELINE_NAME = "test_1"
-
 
 @pytest.mark.dependency()
 def test_create_pipeline_project(browser):
@@ -22,33 +17,29 @@ def test_create_pipeline_project(browser):
 
     wait.until(EC.visibility_of_element_located((By.XPATH, "//h2[normalize-space()='Permalinks']")))
     browser.find_element(By.XPATH, "//*[@class='app-jenkins-logo']").click()
-
     label = wait.until(EC.visibility_of_element_located((By.XPATH, "//*[@href='job/test_1/']"))).text
-    assert label == PIPELINE_NAME
 
+    assert label == PIPELINE_NAME
 
 @pytest.mark.dependency(depends=["test_create_pipeline_project"])
 def test_add_description_pipeline(browser):
     text_description = "Description here"
 
     browser.find_element(By.LINK_TEXT, PIPELINE_NAME).click()
-
-
     WebDriverWait(browser, 7).until(
     EC.element_to_be_clickable((By.XPATH, "//a[normalize-space()='Configure']"))).click()
-
     browser.find_element(By.NAME, "description").send_keys(text_description)
     browser.find_element(By.NAME, "Submit").click()
 
     assert browser.find_element(By.ID, "description-content").text == text_description
 
-
 @pytest.mark.dependency(depends=["test_create_pipeline_project"])
-def test_add_advanced_pipeline(browser):
+def test_configure_display_name_by_advanced(browser):
     advanced_name = "Display Name"
+
     wait = WebDriverWait(browser, 7)
     browser.find_element(By.LINK_TEXT, PIPELINE_NAME).click()
-    WebDriverWait(browser, 8).until(
+    WebDriverWait(browser, 10).until(
         EC.element_to_be_clickable((By.XPATH, "//a[normalize-space()='Configure']"))).click()
 
     advanced_button = wait.until(
