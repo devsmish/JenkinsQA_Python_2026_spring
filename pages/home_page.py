@@ -4,7 +4,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 from pages.base_page import BasePage
 from pages.new_item_page import NewItemPage
-from pages.login_page import LoginPage
 
 
 class HomePage(BasePage):
@@ -35,18 +34,28 @@ class HomePage(BasePage):
 
       
     def show_dropdown_menu_from_profile_icon(self):
-        ActionChains(self.driver).move_to_element(
-            self.driver.find_element(By.ID, "root-action-UserAction")
-        ).perform()
+        user_icon = self.wait10.until(EC.visibility_of_element_located((By.ID, "root-action-UserAction")))
+        ActionChains(self.driver).move_to_element(user_icon).perform()
 
         return self
 
       
     def dropdown_menu_sign_out_click(self):
-        self.wait10.until(
-            EC.element_to_be_clickable(
-                (By.XPATH, '//div[@class="jenkins-dropdown"]//a[@href="/logout"]')
-            )
-        ).click()
+        xpath_logout = "//a[contains(@href, '/logout')]"
+        sign_out_button = self.wait10.until(EC.element_to_be_clickable((By.XPATH, xpath_logout)))
 
+        try:
+            sign_out_button.click()
+        except StaleElementReferenceException:
+            self.wait10.until(EC.element_to_be_clickable((By.XPATH, xpath_logout))).click()
+
+        from pages.login_page import LoginPage
         return LoginPage(self.driver)
+
+    def sign_out(self):
+        return self.show_dropdown_menu_from_profile_icon().dropdown_menu_sign_out_click()
+
+    def is_jenkins_icon_visible(self):
+        return self.wait10.until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, "#jenkins-head-icon"))
+        ).is_displayed()
