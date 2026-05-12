@@ -3,7 +3,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from pages.base_page import BasePage
 from pages.new_item_page import NewItemPage
-
+from pages.project_page import ProjectPage
 
 class HomePage(BasePage):
     def new_item_click(self):
@@ -28,3 +28,9 @@ class HomePage(BasePage):
         list_elements = self.driver.find_elements(By.XPATH,
                                                   f" //div[@class='pane-content']//tr/td/a[@class='model-link inside tl-tr']")
         return [name_job.text for name_job in list_elements]
+
+    def project_name_click(self, job_name: str):
+
+        self.driver.find_element(By.XPATH, f"//*[@id='job_{job_name}']/td[3]/a").click()
+
+        return ProjectPage(self.driver)
