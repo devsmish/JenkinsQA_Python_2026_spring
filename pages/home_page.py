@@ -5,7 +5,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from pages.base_page import BasePage
 from pages.new_item_page import NewItemPage
 from pages.login_page import LoginPage
-
+from pages.project_page import ProjectPage
 
 class HomePage(BasePage):
     def new_item_click(self):
@@ -50,3 +50,8 @@ class HomePage(BasePage):
         ).click()
 
         return LoginPage(self.driver)
+
+    def project_name_click(self, job_name: str):
+        self.driver.find_element(By.XPATH, f"//*[@id='job_{job_name}']/td[3]/a").click()
+
+        return ProjectPage(self.driver)
