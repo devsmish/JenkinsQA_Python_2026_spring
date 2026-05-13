@@ -34,3 +34,4 @@ class HomePage(BasePage):
         self.driver.find_element(By.XPATH, f"//*[@id='job_{job_name}']/td[3]/a").click()
 
         return ProjectPage(self.driver)
+

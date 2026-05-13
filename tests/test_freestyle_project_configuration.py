@@ -135,7 +135,7 @@ def test_build_steps_configure_shell_option(browser):
     .project_configure_click()
 
     .button_add_build_step_click()
-    .select_option_execute_shell_in_add_build_step_click()
+    .select_execute_shell_option()
     .set_shell_script(command_shell)
     .button_save_click()
     )
