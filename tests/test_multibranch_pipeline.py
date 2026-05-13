@@ -1,9 +1,8 @@
 import pytest
 
 from pages.home_page import HomePage
-from test_delete_project import generate_project_name
 
-current_project_name = generate_project_name()
+old_name = "oldName"
 new_name = "newName"
 
 @pytest.mark.dependency()
@@ -11,7 +10,7 @@ def test_rename_by_valid_name(browser):
 
     res = (HomePage(browser)
      .new_item_click()
-     .set_project_name(current_project_name)
+     .set_project_name(old_name)
      .select_multibranch_and_ok_click()
      .click_submit_button()
      .click_rename_button()
