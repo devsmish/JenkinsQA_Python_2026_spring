@@ -3,8 +3,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
 from pages.base_page import BasePage
+from pages.multibranch_pipeline_page import MultiBranchPipelinePage
 from pages.new_item_page import NewItemPage
 from pages.login_page import LoginPage
+from pages.pipeline_project_page import PipelineProjectPage
+
 from pages.project_page import ProjectPage
 
 class HomePage(BasePage):
@@ -51,7 +54,18 @@ class HomePage(BasePage):
 
         return LoginPage(self.driver)
 
+    def click_pipeline_job(self, job_name: str):
+        self.wait5.until(EC.element_to_be_clickable((By.XPATH, f"(//a[@href='job/{job_name}/'])[1]"))).click()
+
+        return PipelineProjectPage(self.driver)
+
+    def click_multibranch_pipeline_job(self, job_name: str):
+        self.wait5.until(EC.element_to_be_clickable((By.XPATH, f"(//a[@href='job/{job_name}/'])[1]"))).click()
+
+        return MultiBranchPipelinePage(self.driver)
+
     def project_name_click(self, job_name: str):
         self.driver.find_element(By.XPATH, f"//*[@id='job_{job_name}']/td[3]/a").click()
 
         return ProjectPage(self.driver)
+
