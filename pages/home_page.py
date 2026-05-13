@@ -5,6 +5,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from pages.base_page import BasePage
 from pages.new_item_page import NewItemPage
 from pages.login_page import LoginPage
+from pages.pipeline_project_page import PipelineProjectPage
 
 
 class HomePage(BasePage):
@@ -50,3 +51,8 @@ class HomePage(BasePage):
         ).click()
 
         return LoginPage(self.driver)
+
+    def click_pipeline_job(self, job_name: str):
+        self.wait5.until(EC.element_to_be_clickable((By.XPATH, f"(//a[@href='job/{job_name}/'])[1]"))).click()
+
+        return PipelineProjectPage(self.driver)
