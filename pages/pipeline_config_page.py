@@ -6,7 +6,7 @@ from pages.pipeline_project_page import PipelineProjectPage
 
 class PipelineConfigPage(BasePage):
 
-    def save_click(self):
+    def click_submit_button(self):
         self.wait10.until(EC.element_to_be_clickable((By.NAME, "Submit"))).click()
 
         return PipelineProjectPage(self.driver)

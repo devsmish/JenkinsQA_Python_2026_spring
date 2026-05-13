@@ -19,7 +19,7 @@ def test_cancel_delete_job(browser):
      .new_item_click()
      .set_project_name(current_project_name)
      .select_pipeline_and_ok_click()
-     .save_click()
+     .click_submit_button()
      .click_delete_pipeline()
      .click_cancel_delete_button()
      .refresh_pipeline_project_page()

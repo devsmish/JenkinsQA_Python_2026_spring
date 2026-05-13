@@ -4,6 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
 from pages.freestyle_config_page import FreestyleConfigPage
 from pages.folder_config_page import FolderConfigPage
+from pages.multibranch_pipeline_config_page import MultiBranchPipelineConfigPage
 from pages.pipeline_config_page import PipelineConfigPage
 
 class NewItemPage(BasePage):
@@ -28,6 +29,10 @@ class NewItemPage(BasePage):
         self.wait10.until(EC.element_to_be_clickable((By.XPATH, "((//ul[@class='j-item-options'])[1]//li)[1]"))).click()
         self.driver.find_element(By.ID, "ok-button").click()
 
-        self.wait10.until(EC.visibility_of_element_located((By.NAME, "Submit")))
-
         return PipelineConfigPage(self.driver)
+
+    def select_multibranch_and_ok_click(self):
+        self.wait10.until(EC.element_to_be_clickable((By.XPATH, "//li[@class='org_jenkinsci_plugins_workflow_multibranch_WorkflowMultiBranchProject']"))).click()
+        self.driver.find_element(By.ID, "ok-button").click()
+
+        return MultiBranchPipelineConfigPage(self.driver)
