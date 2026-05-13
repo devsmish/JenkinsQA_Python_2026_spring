@@ -1,9 +1,11 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 
 from pages.base_page import BasePage
 from pages.new_item_page import NewItemPage
-from pages.project_page import ProjectPage
+from pages.login_page import LoginPage
+
 
 class HomePage(BasePage):
     def new_item_click(self):
@@ -13,11 +15,13 @@ class HomePage(BasePage):
 
         return NewItemPage(self.driver)
 
+
     def get_project_names_list(self):
         project_elements = self.driver.find_elements(By.CLASS_NAME, "jenkins-table__link")
         project_names = [element.text for element in project_elements]
 
         return project_names
+
 
     def schedule_build_click(self, job_name: str):
         self.driver.find_element(By.XPATH, f"//tr/td[7]//a[@tooltip='Schedule a Build for {job_name}']").click()
@@ -29,9 +33,20 @@ class HomePage(BasePage):
                                                   f" //div[@class='pane-content']//tr/td/a[@class='model-link inside tl-tr']")
         return [name_job.text for name_job in list_elements]
 
-    def project_name_click(self, job_name: str):
+      
+    def show_dropdown_menu_from_profile_icon(self):
+        ActionChains(self.driver).move_to_element(
+            self.driver.find_element(By.ID, "root-action-UserAction")
+        ).perform()
 
-        self.driver.find_element(By.XPATH, f"//*[@id='job_{job_name}']/td[3]/a").click()
+        return self
 
-        return ProjectPage(self.driver)
+      
+    def dropdown_menu_sign_out_click(self):
+        self.wait10.until(
+            EC.element_to_be_clickable(
+                (By.XPATH, '//div[@class="jenkins-dropdown"]//a[@href="/logout"]')
+            )
+        ).click()
 
+        return LoginPage(self.driver)
