@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
-from common.jenkins_utils import logout
 
 load_dotenv()
 USERNAME = os.getenv("JENKINS_USERNAME")
@@ -12,7 +11,7 @@ PASSWORD = os.getenv("JENKINS_PASSWORD")
 
 @pytest.mark.dependency()
 def test_sign_in(browser):
-    logout(browser)
+    HomePage(browser).sign_out()
 
     home_page = (
         LoginPage(browser)
