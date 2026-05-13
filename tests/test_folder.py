@@ -23,7 +23,6 @@ def create_folder(driver, name, full_creation=True):
         ).click()
 
 
-@pytest.mark.skip
 @pytest.mark.dependency()
 def test_create_folder(browser):
     project_names_list = (
@@ -57,17 +56,17 @@ def test_create_folder_with_display_name(browser):
 
 
 def test_create_folder_with_description(browser):
-        description_text = (
-            HomePage(browser)
-            .new_item_click()
-            .set_project_name(FOLDER_NAME)
-            .select_folder_and_ok_click()
-            .set_description(FOLDER_DESCRIPTION)
-            .save_click()
-            .get_config_description()
-        )
+    description_text = (
+        HomePage(browser)
+        .new_item_click()
+        .set_project_name(FOLDER_NAME)
+        .select_folder_and_ok_click()
+        .set_description(FOLDER_DESCRIPTION)
+        .save_click()
+        .get_config_description()
+    )
 
-        assert description_text == FOLDER_DESCRIPTION
+    assert description_text == FOLDER_DESCRIPTION
 
 
 @pytest.mark.dependency(depends=["test_create_folder"])
