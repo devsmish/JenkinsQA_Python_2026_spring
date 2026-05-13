@@ -63,7 +63,9 @@ class HomePage(BasePage):
         self.wait5.until(EC.element_to_be_clickable((By.XPATH, f"(//a[@href='job/{job_name}/'])[1]"))).click()
 
         return MultiBranchPipelinePage(self.driver)
+
     def project_name_click(self, job_name: str):
         self.driver.find_element(By.XPATH, f"//*[@id='job_{job_name}']/td[3]/a").click()
 
         return ProjectPage(self.driver)
+
