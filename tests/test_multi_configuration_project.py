@@ -48,7 +48,7 @@ def test_verify_status_switching_enable_button(browser):
 
     assert "This project is currently disabled" in actual_disable_text
 
-@pytest.mark.skip(reason="Flaky test: NoSuchElementException on CI)
+@pytest.mark.skip(reason="Flaky test: NoSuchElementException on CI")
 def test_verify_enable_toggle_has_tooltip(browser):
     create_multi_configuration_project(browser, multiconfiguration_project_name)
     browser.find_element(By.CSS_SELECTOR, ".jenkins-table__link >span:first-child").click()
